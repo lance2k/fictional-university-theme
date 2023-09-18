@@ -99,6 +99,29 @@ while (have_posts()) {
     }
 
     wp_reset_postdata();
+    $relatedCampuses = get_field('related_campus');
+
+    if ($relatedCampuses) {
+        ?>
+    <hr class="section-break">
+    <h2 class="headline headline--medium">
+        <?php echo get_the_title(); ?> is
+        Available At These Campuses:
+    </h2>
+    <ul class="min-list link-list">
+        <?php
+        foreach ($relatedCampuses as $campus) {
+            ?>
+        <li><a href="<?php echo get_the_permalink($campus); ?>">
+                <?php echo get_the_title($campus); ?>
+            </a></li>
+        <?php
+        }
+        ?>
+    </ul>
+    <?php
+
+    }
     ?>
 
 </div>

@@ -13,7 +13,9 @@ while (have_posts()) {
                 class="metabox__main"><?php echo the_title(); ?></span>
         </p>
     </div>
-    <div class="generic-content"><?php echo the_content(); ?></div>
+    <div class="generic-content">
+        <?php echo the_field('main_body_content'); ?>
+    </div>
     <?php
     $relatedProfessors = new WP_Query([
         'posts_per_page' => '-1',

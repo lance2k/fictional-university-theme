@@ -11,12 +11,53 @@ while (have_posts()) {
                 <?php echo the_post_thumbnail('professorPortrait'); ?>
             </div>
             <div class="two-third">
+                <?php
+    $likeCount = new WP_Query([
+        'post_type' => 'like',
+        'meta_query' => [
+            [
+                'key' => 'liked_professor_id',
+                'compare' => '=',
+                'value' => get_the_id(),
+            ],
+        ],
+    ]);
+
+    $existStatus = 'no';
+
+    if (is_user_logged_in()) {
+        $existQuery = new WP_Query([
+            'author' => get_current_user_id(),
+            'post_type' => 'like',
+            'meta_query' => [
+                [
+                    'key' => 'liked_professor_id',
+                    'compare' => '=',
+                    'value' => get_the_id(),
+                ],
+            ],
+        ]);
+        if ($existQuery->found_posts) {
+            $existStatus = 'yes';
+        }
+    }
+
+    ?>
+                <span class="like-box"
+                    data-like="<?php echo $existQuery->posts[0]->ID ?? ''; ?>"
+                    data-professor="<?php echo the_ID(); ?>"
+                    data-exists="<?php echo $existStatus; ?>">
+                    <i class="fa fa-heart-o" aria-hidden="true"></i>
+                    <i class="fa fa-heart" aria-hidden="true"></i>
+                    <span
+                        class="like-count"><?php echo $likeCount->found_posts; ?></span>
+                </span>
                 <?php echo the_content(); ?>
             </div>
         </div>
     </div>
     <?php
-    $relatedPrograms = get_field('related_programs');
+        $relatedPrograms = get_field('related_programs');
 
     if ($relatedPrograms) {?>
     <hr class="section-break">
